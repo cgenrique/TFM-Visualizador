@@ -35,5 +35,6 @@ def cargar_datos():
         "Renta_Media_Hogar",
         "Esperanza_Vida",
         "Tasa_Dependencia",
-        "Densidad_Poblacion"
+        "Densidad_Poblacion",
+        "Cluster"
     ]].copy()

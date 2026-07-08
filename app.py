@@ -39,6 +39,53 @@ def cerrar():
 
     ventana.destroy()
 
+def actualizar_colores(event=None):
+
+    if combo.get() == "Tipologías territoriales (K-Means)":
+
+        combo_colores.configure(state="normal")
+        combo_colores["values"] = ["Multicolor (Clusters)"]
+        combo_colores.current(0)
+        combo_colores.configure(state="disabled")
+
+    else:
+
+        combo_colores.configure(state="readonly")
+
+        combo_colores["values"] = [
+            "Azules",
+            "Verdes",
+            "Rojos",
+            "Naranjas",
+            "Morados",
+            "Marrones",
+            "Azul verdoso",
+            "Rosa",
+            "Grises"
+        ]
+
+        combo_colores.current(0)
+    if combo.get() == "Tipologías territoriales (K-Means)":
+
+        combo_colores["values"] = ["Multicolor (Clusters)"]
+        combo_colores.current(0)
+
+    else:
+
+        combo_colores["values"] = [
+            "Azules",
+            "Verdes",
+            "Rojos",
+            "Naranjas",
+            "Morados",
+            "Marrones",
+            "Azul verdoso",
+            "Rosa",
+            "Grises"
+        ]
+
+        combo_colores.current(0)
+
 
 # =====================================================
 # INTERFAZ
@@ -82,6 +129,11 @@ combo.current(0)
 
 combo.pack(padx=20, pady=(5, 15))
 
+combo.bind(
+    "<<ComboboxSelected>>",
+    actualizar_colores
+)
+
 tk.Label(
     ventana,
     text="Escala de colores:"
@@ -122,4 +174,5 @@ ventana.protocol(
     cerrar
 )
 
+actualizar_colores()
 ventana.mainloop()

@@ -48,6 +48,10 @@ VARIABLES = {
     "Tasa de dependencia": (
         "Tasa_Dependencia",
         "Tasa de dependencia"
+    ),
+    "Tipologías territoriales (K-Means)": (
+        "Cluster",
+        "Tipologías territoriales"
     )
 }
 
@@ -61,5 +65,6 @@ PALETAS = {
     "Marrones": "YlOrBr",
     "Azul verdoso": "BuGn",
     "Rosa": "PuRd",
-    "Grises": "Greys"
+    "Grises": "Greys",
+    "Multicolor (Clusters)": "CLUSTERS"
 }
