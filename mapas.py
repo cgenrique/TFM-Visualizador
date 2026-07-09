@@ -11,6 +11,102 @@ COLORES_CLUSTER = {
     3: "#ffd92f"    # amarillo
 }
 
+def añadir_controles_exportacion(m, titulo):
+
+    nombre_archivo = (
+        titulo.replace(" ", "_")
+        .replace("á", "a")
+        .replace("é", "e")
+        .replace("í", "i")
+        .replace("ó", "o")
+        .replace("ú", "u")
+        .replace("Á", "A")
+        .replace("É", "E")
+        .replace("Í", "I")
+        .replace("Ó", "O")
+        .replace("Ú", "U")
+        .replace("ñ", "n")
+        .replace("Ñ", "N")
+        .replace("(", "")
+        .replace(")", "")
+        .replace("%", "porcentaje")
+        .replace("€", "euros")
+    )
+
+    template = f"""
+    {{% macro html(this, kwargs) %}}
+
+    <div id="exportPanel" style="
+        position: fixed;
+        top: 80px;
+        right: 10px;
+        z-index: 9999;
+        background: white;
+        padding: 8px;
+        border: 2px solid grey;
+        border-radius: 6px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+    ">
+
+        <button onclick="descargarHTML()" style="width:150px;">
+            Exportar mapa (.html)
+        </button>
+
+    </div>
+
+    <script>
+
+    function descargarHTML() {{
+
+        // Ocultar panel de exportación
+        const panel = document.getElementById("exportPanel");
+        if (panel) panel.style.display = "none";
+
+        // Ocultar controles y leyendas
+        const controles = document.querySelectorAll(".legend, .leaflet-control");
+
+        controles.forEach(el => {{
+            if (el.id !== "exportPanel") {{
+                el.dataset.display = el.style.display;
+                el.style.display = "none";
+            }}
+        }});
+
+        const contenido = document.documentElement.outerHTML;
+
+        // Restaurar controles
+        controles.forEach(el => {{
+            if (el.id !== "exportPanel") {{
+                el.style.display = el.dataset.display || "";
+            }}
+        }});
+
+        if (panel) panel.style.display = "block";
+
+        const blob = new Blob([contenido], {{ type: "text/html" }});
+
+        const enlace = document.createElement("a");
+
+        enlace.href = URL.createObjectURL(blob);
+        enlace.download = "Mapa_{nombre_archivo}_2025.html";
+
+        enlace.click();
+
+        URL.revokeObjectURL(enlace.href);
+    }}
+
+    </script>
+
+    {{% endmacro %}}
+    """
+
+    macro = MacroElement()
+    macro._template = Template(template)
+
+    m.get_root().add_child(macro)
+
 def crear_mapa(
     gdf,
     variable,
@@ -95,6 +191,8 @@ def crear_mapa(
 
     ruta = "mapas/index.html"
 
+    añadir_controles_exportacion(m, titulo)
+    
     m.save(ruta)
 
     webbrowser.open_new_tab(
